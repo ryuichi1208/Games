@@ -17,16 +17,11 @@ void boardPrint(int board[][BOARD_SIZE]);
 int gameEndProcess(int board[][BOARD_SIZE]);
 int lenCheck(int board[][BOARD_SIZE], int x, int y);
 
-//=======================================================
-// main
-//=======================================================
 int main()
 {
-    // 変数宣言
     int board[BOARD_SIZE][BOARD_SIZE];
     int which_turn;
     
-    // 初期処理
     gameInit(board, &which_turn);
     boardPrint(board);
     
@@ -47,9 +42,6 @@ int main()
     return 0;
 }
 
-//-------------------------------------------------
-// 置く場所入力
-//-------------------------------------------------
 void inputPutPos(int board[][BOARD_SIZE], int which)
 {
     int pos_x, pos_y;
@@ -64,36 +56,23 @@ void inputPutPos(int board[][BOARD_SIZE], int which)
     board[pos_y][pos_x] = which;
 }
 
-//-------------------------------------------------
-// 手番交代処理
-//-------------------------------------------------
 void changeTurn(int *which_turn)
 {
     *which_turn = (*which_turn == STONE_BLACK) ? STONE_WHITE : STONE_BLACK;
 }
 
-//-------------------------------------------------
-// 範囲外チェック
-//-------------------------------------------------
 int checkOutPos(int x, int y)
 {
     return (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE);
 }
 
-//-------------------------------------------------
-// ゲーム情報初期化
-//-------------------------------------------------
 void gameInit(int board[][BOARD_SIZE], int *which_turn)
 {
     boardInit(board);
     *which_turn = STONE_BLACK;
 }
 
-//-------------------------------------------------
-// 盤面初期化
-//-------------------------------------------------
-void boardInit(int board[][BOARD_SIZE])
-{
+void boardInit(int board[][BOARD_SIZE]) {
     int i, j;
     for (i = 0; i < BOARD_SIZE; i++) {
         for (j = 0; j < BOARD_SIZE; j++) {
@@ -102,11 +81,7 @@ void boardInit(int board[][BOARD_SIZE])
     }
 }
 
-//-------------------------------------------------
-// 盤面出力
-//-------------------------------------------------
-void boardPrint(int board[][BOARD_SIZE])
-{
+void boardPrint(int board[][BOARD_SIZE]) {
     int i, j;
     
     printf("  ");
@@ -128,11 +103,7 @@ void boardPrint(int board[][BOARD_SIZE])
     puts("");
 }
 
-//-------------------------------------------------
-// ゲーム終了処理
-//-------------------------------------------------
-int gameEndProcess(int board[][BOARD_SIZE])
-{
+int gameEndProcess(int board[][BOARD_SIZE]) {
     int i, j, len_flag;
     
     for (i = 0; i < BOARD_SIZE; i++) {
@@ -147,11 +118,7 @@ int gameEndProcess(int board[][BOARD_SIZE])
     return 0;
 }
 
-//-------------------------------------------------
-// 5連確認
-//-------------------------------------------------
-int lenCheck(int board[][BOARD_SIZE], int x, int y)
-{
+int lenCheck(int board[][BOARD_SIZE], int x, int y) {
     int i, j, len_flag;
     int dx[] = { 0, 1, 1 };
     int dy[] = { 1, 0, 1 };
@@ -167,3 +134,4 @@ int lenCheck(int board[][BOARD_SIZE], int x, int y)
     }
     return 0;
 }
+
