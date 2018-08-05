@@ -1,191 +1,138 @@
 #include <stdio.h>
 #include "maze.h"
 
-int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN])
-{
-  int i, j;
+int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
+	int i, j;
 
-  for(i = 0; i < MAZE_ROW ; i++) //行
-  {
-    for(j = 0;  j < MAZE_COLUMN; j++) //列
-    {
-      if(maze[i][j].kind == START) //スタート地点ならばプレイヤーの位置に設定する
-      {
-        *playerRow    = i;
-        *playerColumn = j;
-        return 0; //関数終了(プレイヤーを設定できれば残りの処理は必要ない)
-      }
-    }
-  }
+	for(i = 0; i < MAZE_ROW ; i++) {
+		for(j = 0;  j < MAZE_COLUMN; j++) {
+			if(maze[i][j].kind == START) {
+				*playerRow    = i;
+				*playerColumn = j;
+				return 0;
+			}
+		}
+	}
 
-  //スタート地点がなければ、プレイヤーを設定できずここまでくる
-  printf("スタートがありません\n");
-  return -1;
+	//スタート地点がなければ、プレイヤーを設定できずここまでくる
+	printf("スタートがありません\n");
+	return -1;
 }
 
 
 //迷路表示
-void MazeDraw(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN])
-{
-  int i, j;
+void MazeDraw(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
+	int i, j;
 
-  for(i = 0; i < MAZE_ROW; i++) //行
-  {
-    for(j = 0; j < MAZE_COLUMN; j++ ) //列
-    {
-      if(i == playerRow && j == playerColumn) //プレイヤー位置
-      {
-        printf("Ｐ");
-      }
-      else if(maze[i][j].flag == FALSE) //ブロックが判明していない場合
-      {
-        printf("？");
-      }
-      else
-      {
-        switch(maze[i][j].kind)
-        {
-        case WALL:
-          printf("口"); break; //壁
-        case GOAL:
-          printf("Ｇ"); break; //ゴール
-        default:
-          printf("　"); break; //その他(道、スタート)
-        }
-      }
-    }
-    printf("\n");
-  }
+	for(i = 0; i < MAZE_ROW; i++) {
+		for(j = 0; j < MAZE_COLUMN; j++ ) {
+			if(i == playerRow && j == playerColumn) {
+				printf("Ｐ");
+			} else if(maze[i][j].flag == FALSE) {
+				printf("？");
+			} else {
+				switch(maze[i][j].kind) {
+					case WALL:
+						printf("口"); break;
+					case GOAL:
+						printf("Ｇ"); break; 
+					default:
+						printf("　"); break;
+				}
+			}
+		}
+		printf("\n");
+	}
 }
 
-
-//方向
 enum MazeDirection{UP, DOWN, LEFT, RIGHT, Invalid}; 
 
-//プレイヤー移動
-void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN])
-{
-  char buf[100];
-  int  direction = -1;
+void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
+	char buf[100];
+	int  direction = -1;
 
-  printf("%d:上\n", UP);
-  printf("%d:下\n", DOWN);
-  printf("%d:左\n", LEFT);
-  printf("%d:右\n", RIGHT);
-  printf("数字を入力してください。：");
+	printf("%d:上\n", UP);
+	printf("%d:下\n", DOWN);
+	printf("%d:左\n", LEFT);
+	printf("%d:右\n", RIGHT);
+	printf("数字を入力してください。：");
 
-  fgets(buf, sizeof(buf), stdin);      //文字列で入力を読み込む
-  sscanf(buf, "%d", &direction);        //数字にできる場合は変換(できなければ何もしない)
+	fgets(buf, sizeof(buf), stdin);      //文字列で入力を読み込む
+	sscanf(buf, "%d", &direction);        //数字にできる場合は変換(できなければ何もしない)
 
-  while(direction < 0 || direction > (Invalid - 1)) //入力が正しい場合まで繰り返す
-  {
-    printf("入力が不正です。再入力してください:");
-    fgets(buf, sizeof(buf), stdin);
-    sscanf(buf, "%d", &direction);
-  }
+	while(direction < 0 || direction > (Invalid - 1)) {
+		printf("入力が不正です。再入力してください:");
+		fgets(buf, sizeof(buf), stdin);
+		sscanf(buf, "%d", &direction);
+	}
 
 
-  switch(direction){
-    //上移動
-  case UP:
-  {
-    if(*playerRow - 1 >= 0) //迷路の範囲外でないことを確認
-    {
-      maze[*playerRow - 1][*playerColumn].flag = TRUE; //ブロックの種類が判明
+	switch(direction){
+		case UP: {
+			if(*playerRow - 1 >= 0) {
+				maze[*playerRow - 1][*playerColumn].flag = TRUE;
+					if(maze[*playerRow - 1][*playerColumn].kind != WALL) {
+						*playerRow -= 1; //移動
+						printf("\n上に移動しました。\n");
+					} else {
+						printf("\n壁です。\n");
+					}
+			} else {
+				printf("\n範囲外です\n");
+			}
+		}
+		break;
 
-      if(maze[*playerRow - 1][*playerColumn].kind != WALL) //壁かどうか確認
-      {
-        *playerRow -= 1; //移動
-        printf("\n上に移動しました。\n");
-      }
-      else
-      {
-        printf("\n壁です。\n");
-      }
-    }
-    else
-    {
-      printf("\n範囲外です\n");
+		//下移動
+		case DOWN: {
+			if(*playerRow + 1 < MAZE_ROW) {
+				maze[*playerRow + 1][*playerColumn].flag = TRUE;
+				if(maze[*playerRow + 1][*playerColumn].kind != WALL) {
+					*playerRow += 1;
+					printf("\n下に移動しました。\n");
+				} else {
+					printf("\n壁です。\n");
+				}
+			} else {
+				printf("\n範囲外です\n");
 
-    }
-  }
-  break;
+			}
+		}
+		break;
 
-  //下移動
-  case DOWN:
-  {
-    if(*playerRow + 1 < MAZE_ROW)
-    {
-      maze[*playerRow + 1][*playerColumn].flag = TRUE;
+		//左移動
+		case LEFT: {
+			if(*playerColumn - 1 >= 0) {
+				maze[*playerRow][*playerColumn - 1].flag = TRUE;
+				if(maze[*playerRow][*playerColumn - 1].kind != WALL) {
+					*playerColumn -= 1;
+					printf("\n左に移動しました。\n");
+				} else {
+					printf("\n壁です。\n");
+				}
+			} else {
+				printf("\n範囲外です\n");
 
-      if(maze[*playerRow + 1][*playerColumn].kind != WALL)
-      {
-        *playerRow += 1;
-        printf("\n下に移動しました。\n");
-      }
-      else
-      {
-        printf("\n壁です。\n");
-      }
-    }
-    else
-    {
-      printf("\n範囲外です\n");
+			}
+		}
+		break;
 
-    }
-  }
-  break;
-
-  //左移動
-  case LEFT:
-  {
-    if(*playerColumn - 1 >= 0)
-    {
-      maze[*playerRow][*playerColumn - 1].flag = TRUE;
-
-      if(maze[*playerRow][*playerColumn - 1].kind != WALL)
-      {
-        *playerColumn -= 1;
-        printf("\n左に移動しました。\n");
-      }
-      else
-      {
-        printf("\n壁です。\n");
-      }
-    }
-    else
-    {
-      printf("\n範囲外です\n");
-
-    }
-  }
-  break;
-
-  //右移動
-  case RIGHT:
-  {
-    if(*playerColumn + 1 < MAZE_COLUMN)
-    {
-      maze[*playerRow][*playerColumn + 1].flag = TRUE;
-
-      if(maze[*playerRow][*playerColumn + 1].kind != WALL)
-      {
-        *playerColumn += 1;
-        printf("\n右に移動しました。\n");
-      }
-      else
-      {
-        printf("\n壁です。\n");
-      }
-    }
-    else
-    {
-      printf("\n範囲外です\n");
-
-    }
-  }
-  break;
-  }
+		//右移動
+		case RIGHT: {
+			if(*playerColumn + 1 < MAZE_COLUMN) {
+				maze[*playerRow][*playerColumn + 1].flag = TRUE;
+				if(maze[*playerRow][*playerColumn + 1].kind != WALL) {
+					*playerColumn += 1;
+					printf("\n右に移動しました。\n");
+				} else {
+					printf("\n壁です。\n");
+				}
+			} else {
+				printf("\n範囲外です\n");
+			}
+		}
+		break;
+	}
 }
 
 
