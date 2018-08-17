@@ -148,12 +148,6 @@ int main(void){
 	return(0);
 }
  
- 
- 
- 
- 
-/******************************************************************************** 評価関数 ******************************************************************************************/
- 
 //評価値の合計を計算
 int Evalu_Total(const int ThinkBoard[8][8], int turn){
  
@@ -163,8 +157,6 @@ int Evalu_Total(const int ThinkBoard[8][8], int turn){
 	//評価関数のパラメーターを変化させる
 	ChangeStage(ThinkBoard);
  
-	//各々の評価値
-	//【自分の着手可能手数】、【相手の着手可能手数】、【自分のマスの評価値の合計】、【自分の駒の数】、【自分の確定石の数】、【自分のウイングの数】、【自分の山の数】
 	int e[EVALUATION_POINTS] = { Evalu_HowMany(ThinkBoard, turn), Evalu_BoardScore(ThinkBoard, turn),
 		Evalu_HowManyStones(ThinkBoard, turn), Evalu_HowManyFixedStones(ThinkBoard, turn), Evalu_Wing(ThinkBoard, turn),
 		Evalu_Mountain(ThinkBoard, turn) };
