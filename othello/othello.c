@@ -1,3 +1,5 @@
+#include "othello.h"
+
 int main(void){
  
 	//コンティニューするかどうかを保存する変数
@@ -485,15 +487,11 @@ void ChangeStage(const int ThinkBoard[8][8]){
  
 }
  
- 
-/******************************************************************************** 探索アルゴリズム ******************************************************************************************/
- 
 //コンピューターの評価点を表示し最善の場所をグローバル変数bestplaceに保存
 void BestPlace(int ThinkBoard[8][8], int turn){
  
 	//局面数カウントをリセット
 	count = 0;
- 
  
 	//minimax()で評価点を記録し最善手をグローバル変数bestplaceに記録
 	int score = minimax(board, turn, DEPTH);
@@ -550,9 +548,8 @@ int minimax(int ThinkBoard[8][8], int ThinkTurn, int depth){
 				count++;
  
 				//再帰
-				if (CanPut(EnemyColor(ThinkTurn)))    var = minimax(ThinkBoard, EnemyColor(ThinkTurn), depth - 1); //着手可能な場所がある
-				if (!(CanPut(EnemyColor(ThinkTurn)))) var = minimax(ThinkBoard, ThinkTurn, depth - 1);             //着手可能な場所がない
- 
+				if (CanPut(EnemyColor(ThinkTurn)))    var = minimax(ThinkBoard, EnemyColor(ThinkTurn), depth - 1);
+				if (!(CanPut(EnemyColor(ThinkTurn)))) var = minimax(ThinkBoard, ThinkTurn, depth - 1);
  
 				//得点と最善手を更新
 				if (ThinkTurn == turn && score <= var){
@@ -591,11 +588,6 @@ int minimax(int ThinkBoard[8][8], int ThinkTurn, int depth){
  
  
 }
- 
- 
- 
- 
-/********************************************************* 根幹部分の関数（基本的に改変する必要が無い） ******************************************************************************************/
  
 //多次元配列のx要素に変換
 int Trans_x(int place){
