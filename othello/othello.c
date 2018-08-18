@@ -1,3 +1,5 @@
+#include "othello.h"
+
 int main(void){
  
 	//コンティニューするかどうかを保存する変数
@@ -146,12 +148,6 @@ int main(void){
 	return(0);
 }
  
- 
- 
- 
- 
-/******************************************************************************** 評価関数 ******************************************************************************************/
- 
 //評価値の合計を計算
 int Evalu_Total(const int ThinkBoard[8][8], int turn){
  
@@ -161,8 +157,6 @@ int Evalu_Total(const int ThinkBoard[8][8], int turn){
 	//評価関数のパラメーターを変化させる
 	ChangeStage(ThinkBoard);
  
-	//各々の評価値
-	//【自分の着手可能手数】、【相手の着手可能手数】、【自分のマスの評価値の合計】、【自分の駒の数】、【自分の確定石の数】、【自分のウイングの数】、【自分の山の数】
 	int e[EVALUATION_POINTS] = { Evalu_HowMany(ThinkBoard, turn), Evalu_BoardScore(ThinkBoard, turn),
 		Evalu_HowManyStones(ThinkBoard, turn), Evalu_HowManyFixedStones(ThinkBoard, turn), Evalu_Wing(ThinkBoard, turn),
 		Evalu_Mountain(ThinkBoard, turn) };
@@ -485,15 +479,11 @@ void ChangeStage(const int ThinkBoard[8][8]){
  
 }
  
- 
-/******************************************************************************** 探索アルゴリズム ******************************************************************************************/
- 
 //コンピューターの評価点を表示し最善の場所をグローバル変数bestplaceに保存
 void BestPlace(int ThinkBoard[8][8], int turn){
  
 	//局面数カウントをリセット
 	count = 0;
- 
  
 	//minimax()で評価点を記録し最善手をグローバル変数bestplaceに記録
 	int score = minimax(board, turn, DEPTH);
@@ -550,9 +540,8 @@ int minimax(int ThinkBoard[8][8], int ThinkTurn, int depth){
 				count++;
  
 				//再帰
-				if (CanPut(EnemyColor(ThinkTurn)))    var = minimax(ThinkBoard, EnemyColor(ThinkTurn), depth - 1); //着手可能な場所がある
-				if (!(CanPut(EnemyColor(ThinkTurn)))) var = minimax(ThinkBoard, ThinkTurn, depth - 1);             //着手可能な場所がない
- 
+				if (CanPut(EnemyColor(ThinkTurn)))    var = minimax(ThinkBoard, EnemyColor(ThinkTurn), depth - 1);
+				if (!(CanPut(EnemyColor(ThinkTurn)))) var = minimax(ThinkBoard, ThinkTurn, depth - 1);
  
 				//得点と最善手を更新
 				if (ThinkTurn == turn && score <= var){
@@ -591,11 +580,6 @@ int minimax(int ThinkBoard[8][8], int ThinkTurn, int depth){
  
  
 }
- 
- 
- 
- 
-/********************************************************* 根幹部分の関数（基本的に改変する必要が無い） ******************************************************************************************/
  
 //多次元配列のx要素に変換
 int Trans_x(int place){
