@@ -1,3 +1,3 @@
 ## Overview
 
-It is a public repository of homebrew games. We will place works created in C language, Python etc. Basically the license is MIT.
+It is a public repository of homebrew games. We will place works created in C language, Python etc. Basically the license is MIT. Games currently being created will also be released sequentially.
